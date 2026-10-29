@@ -1,5 +1,11 @@
 
+using Cars.API.Middleware;
+using Cars.Aplication.Cars;
+using Cars.Application.Cars;
+using Cars.Application.Common.Behaviors;
 using Cars.Infrastructure;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +29,20 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(GetCarsList.Handler).Assembly);
+});
+
+builder.Services.AddValidatorsFromAssemblyContaining<Create.CommandValidator>();
+
+builder.Services.AddTransient(
+    typeof(IPipelineBehavior<,>),
+    typeof(ValidationBehavior<,>));
+
 var app = builder.Build();
+
+app.UseMiddleware<ApiExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -47,7 +66,7 @@ try
 
     await context.Database.MigrateAsync();
 
-    await Seed.SeedData(context); //метод який дає дані
+    await Seed.SeedData(context);
 }
 catch (Exception ex)
 {
