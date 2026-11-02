@@ -1,0 +1,29 @@
+{
+  "cars": [
+    {
+      "id": "2",
+      "brand": "Skoda",
+      "model": "Octavia",
+      "doorsNumber": 5,
+      "luggageCapacity": 600,
+      "engineCapacity": 1500,
+      "fuelType": 1,
+      "productionDate": "2021-03-15",
+      "averageFuelConsumption": 6.8,
+      "bodyType": 1
+    },
+    {
+      "brand": "Lada",
+      "model": "2106",
+      "doorsNumber": 4,
+      "luggageCapacity": 2,
+      "engineCapacity": 100,
+      "fuelType": 0,
+      "productionDate": "2026-11-13",
+      "averageFuelConsumption": 0.8,
+      "bodyType": 5,
+      "id": "33Ii2rXOk7I"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
