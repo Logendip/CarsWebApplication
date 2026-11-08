@@ -1,0 +1,82 @@
+.favorite-button {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    background: #ffffff;
+    color: #9ca3af;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.favorite-button:hover {
+    background: #fff1f2;
+    border-color: #fecdd3;
+    color: #ef4444;
+    transform: translateY(-2px);
+}
+
+.favorite-button:active {
+    transform: scale(0.9);
+}
+
+.favorite-button.is-favorite {
+    color: #ef4444;
+    background: #fff1f2;
+    border-color: #fecdd3;
+}
+
+.favorite-button.is-favorite:hover {
+    background: #ffe4e6;
+    color: #dc2626;
+}
+
+.favorite-icon {
+    transition: transform 0.2s ease;
+}
+
+.favorite-button:hover .favorite-icon {
+    transform: scale(1.12);
+}
+
+.favorite-button.is-favorite .favorite-icon {
+    animation: heart-pop 0.4s ease;
+}
+
+@keyframes heart-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    35% {
+        transform: scale(1.4);
+    }
+
+    65% {
+        transform: scale(0.85);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+.favorite-button svg {
+    display: block;
+    width: 23px;
+    height: 23px;
+    flex-shrink: 0;
+    color: inherit;
+}

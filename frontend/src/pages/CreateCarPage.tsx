@@ -2,43 +2,136 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import type { FormEvent } from 'react';
-import type { NewCar } from '../models/Car';
 import { createCar } from '../services/carService';
+import { ApiError } from '../models/ApiError';
+import type { NewCar } from '../models/Car';
+import './CreateCarPage.css';
+
+const fuelTypes = [
+    { value: 0, label: 'Benzyna' },
+    { value: 1, label: 'Diesel' },
+    { value: 2, label: 'Hybryda' },
+    { value: 3, label: 'Elektryczny' },
+    { value: 4, label: 'LPG' }
+];
+
+const bodyTypes = [
+    { value: 0, label: 'Hatchback' },
+    { value: 1, label: 'Sedan' },
+    { value: 2, label: 'Kombi' },
+    { value: 3, label: 'SUV' },
+    { value: 4, label: 'Roadster' }
+];
+
+type CarFormState = {
+    brand: string;
+    model: string;
+    doorsNumber: string;
+    luggageCapacity: string;
+    engineCapacity: string;
+    fuelType: number;
+    productionDate: string;
+    averageFuelConsumption: string;
+    bodyType: number;
+};
+
+type CarFormErrors = Partial<Record<keyof CarFormState, string>>;
+
+function mapApiErrors(errors: Record<string, string[]>): CarFormErrors {
+    const mappedErrors: CarFormErrors = {};
+
+    const fields: (keyof CarFormState)[] = [
+        'brand',
+        'model',
+        'doorsNumber',
+        'luggageCapacity',
+        'engineCapacity',
+        'fuelType',
+        'productionDate',
+        'averageFuelConsumption',
+        'bodyType'
+    ];
+
+    for (const [field, messages] of Object.entries(errors)) {
+        const propertyName = field.split('.').pop();
+
+        if (!propertyName) continue;
+
+        const formField =
+            propertyName.charAt(0).toLowerCase() + propertyName.slice(1);
+
+        if (fields.includes(formField as keyof CarFormState)) {
+            mappedErrors[formField as keyof CarFormState] = messages.join(' ');
+        }
+    }
+
+    return mappedErrors;
+}
 
 export default function CreateCarPage() {
     const navigate = useNavigate();
 
-    const [car, setCar] = useState<NewCar>({
+    const [car, setCar] = useState<CarFormState>({
         brand: '',
         model: '',
-        doorsNumber: 0,
-        luggageCapacity: 0,
-        engineCapacity: 0,
+        doorsNumber: '4',
+        luggageCapacity: '',
+        engineCapacity: '',
         fuelType: 0,
         productionDate: '',
-        averageFuelConsumption: 0,
+        averageFuelConsumption: '',
         bodyType: 0
     });
 
-    const [loading, setLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState<CarFormErrors>({});
+
+    function updateCar<K extends keyof CarFormState>(
+        field: K,
+        value: CarFormState[K]
+    ) {
+        setCar(previous => ({
+            ...previous,
+            [field]: value
+        }));
+
+        setFieldErrors(previous => ({
+            ...previous,
+            [field]: undefined
+        }));
+
+        setError('');
+    }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        setLoading(true);
         setError('');
+        setFieldErrors({});
+
+        if (
+            !car.doorsNumber.trim() ||
+            !car.luggageCapacity.trim() ||
+            !car.engineCapacity.trim() ||
+            !car.averageFuelConsumption.trim()
+        ) {
+            setError('Uzupełnij wszystkie pola liczbowe.');
+            return;
+        }
+
+        setSaving(true);
 
         try {
             const newCar: NewCar = {
                 brand: car.brand,
                 model: car.model,
-                doorsNumber: car.doorsNumber,
-                luggageCapacity: car.luggageCapacity,
-                engineCapacity: car.engineCapacity,
+                doorsNumber: Number(car.doorsNumber),
+                luggageCapacity: Number(car.luggageCapacity),
+                engineCapacity: Number(car.engineCapacity),
                 fuelType: car.fuelType,
                 productionDate: car.productionDate,
-                averageFuelConsumption: car.averageFuelConsumption,
+                averageFuelConsumption: Number(car.averageFuelConsumption),
                 bodyType: car.bodyType
             };
 
@@ -46,123 +139,185 @@ export default function CreateCarPage() {
 
             navigate(`/cars/${createdCar.id}`);
         } catch (err) {
-            setError(
-                err instanceof Error
-                    ? err.message
-                    : 'Failed to create car.'
-            );
+            if (err instanceof ApiError) {
+                setFieldErrors(mapApiErrors(err.errors));
+
+                if (Object.keys(err.errors).length === 0) {
+                    setError(err.message);
+                }
+            } else {
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : 'Failed to create car.'
+                );
+            }
         } finally {
-            setLoading(false);
+            setSaving(false);
         }
     }
 
     return (
-        <div>
-            <h1>Dodaj samochód</h1>
+        <div className="create-car-page">
+            <div className="create-car-header">
+                <h1>Dodaj samochód</h1>
+                <p>Wprowadź dane samochodu, aby dodać go do bazy.</p>
+            </div>
 
-            {error && <p>Error: {error}</p>}
+            {error && (
+                <div className="create-car-error">
+                    {error}
+                </div>
+            )}
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Marka:</label>
-                    <input
-                        type="text"
-                        value={car.brand}
-                        onChange={e => setCar({ ...car, brand: e.target.value })}
-                        required
-                    />
+            <form onSubmit={handleSubmit} className="create-car-form">
+                <div className="form-grid">
+                    <div className="form-field">
+                        <label htmlFor="brand">Marka:</label>
+                        <input
+                            id="brand"
+                            type="text"
+                            value={car.brand}
+                            onChange={e => updateCar('brand', e.target.value)}
+                            className={fieldErrors.brand ? 'input-error' : ''}
+                            required
+                        />
+                        {fieldErrors.brand && <span className="field-error">{fieldErrors.brand}</span>}
+                    </div>
+
+                    <div className="form-field">
+                        <label htmlFor="model">Model:</label>
+                        <input
+                            id="model"
+                            type="text"
+                            value={car.model}
+                            onChange={e => updateCar('model', e.target.value)}
+                            className={fieldErrors.model ? 'input-error' : ''}
+                            required
+                        />
+                        {fieldErrors.model && <span className="field-error">{fieldErrors.model}</span>}
+                    </div>
+
+                    <div className="form-field">
+                        <label htmlFor="doorsNumber">Liczba drzwi:</label>
+                        <input
+                            id="doorsNumber"
+                            type="number"
+                            min="2"
+                            max="5"
+                            value={car.doorsNumber}
+                            onChange={e => updateCar('doorsNumber', e.target.value)}
+                            className={fieldErrors.doorsNumber ? 'input-error' : ''}
+                            required
+                        />
+                        {fieldErrors.doorsNumber && <span className="field-error">{fieldErrors.doorsNumber}</span>}
+                    </div>
+
+                    <div className="form-field">
+                        <label htmlFor="luggageCapacity">Pojemność bagażnika (l):</label>
+                        <input
+                            id="luggageCapacity"
+                            type="number"
+                            min="0"
+                            value={car.luggageCapacity}
+                            onChange={e => updateCar('luggageCapacity', e.target.value)}
+                            className={fieldErrors.luggageCapacity ? 'input-error' : ''}
+                            required
+                        />
+                        {fieldErrors.luggageCapacity && <span className="field-error">{fieldErrors.luggageCapacity}</span>}
+                    </div>
+
+                    <div className="form-field">
+                        <label htmlFor="engineCapacity">Pojemność silnika (cm³):</label>
+                        <input
+                            id="engineCapacity"
+                            type="number"
+                            min="1"
+                            value={car.engineCapacity}
+                            onChange={e => updateCar('engineCapacity', e.target.value)}
+                            className={fieldErrors.engineCapacity ? 'input-error' : ''}
+                            required
+                        />
+                        {fieldErrors.engineCapacity && <span className="field-error">{fieldErrors.engineCapacity}</span>}
+                    </div>
+
+                    <div className="form-field">
+                        <label htmlFor="fuelType">Rodzaj paliwa:</label>
+                        <select
+                            id="fuelType"
+                            value={car.fuelType}
+                            onChange={e => updateCar('fuelType', Number(e.target.value))}
+                        >
+                            {fuelTypes.map(type => (
+                                <option key={type.value} value={type.value}>
+                                    {type.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="form-field">
+                        <label htmlFor="productionDate">Data produkcji:</label>
+                        <input
+                            id="productionDate"
+                            type="date"
+                            value={car.productionDate}
+                            onChange={e => updateCar('productionDate', e.target.value)}
+                            className={fieldErrors.productionDate ? 'input-error' : ''}
+                            required
+                        />
+                        {fieldErrors.productionDate && <span className="field-error">{fieldErrors.productionDate}</span>}
+                    </div>
+
+                    <div className="form-field">
+                        <label htmlFor="averageFuelConsumption">Średnie spalanie (l/100 km):</label>
+                        <input
+                            id="averageFuelConsumption"
+                            type="number"
+                            min="0"
+                            step="0.1"
+                            placeholder="Np. 6.5"
+                            value={car.averageFuelConsumption}
+                            onChange={e => updateCar('averageFuelConsumption', e.target.value)}
+                            className={fieldErrors.averageFuelConsumption ? 'input-error' : ''}
+                            required
+                        />
+                        {fieldErrors.averageFuelConsumption && <span className="field-error">{fieldErrors.averageFuelConsumption}</span>}
+                    </div>
+
+                    <div className="form-field">
+                        <label htmlFor="bodyType">Typ nadwozia:</label>
+                        <select
+                            id="bodyType"
+                            value={car.bodyType}
+                            onChange={e => updateCar('bodyType', Number(e.target.value))}
+                        >
+                            {bodyTypes.map(type => (
+                                <option key={type.value} value={type.value}>
+                                    {type.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
-                <div>
-                    <label>Model:</label>
-                    <input
-                        type="text"
-                        value={car.model}
-                        onChange={e => setCar({ ...car, model: e.target.value })}
-                        required
-                    />
-                </div>
+                <div className="create-car-actions">
+                    <button
+                        type="button"
+                        className="cancel-button"
+                        onClick={() => navigate('/cars')}
+                    >
+                        Anuluj
+                    </button>
 
-                <div>
-                    <label>Liczba drzwi:</label>
-                    <input
-                        type="number"
-                        min="1"
-                        value={car.doorsNumber}
-                        onChange={e => setCar({ ...car, doorsNumber: Number(e.target.value) })}
-                        required
-                    />
+                    <button
+                        type="submit"
+                        className="submit-button"
+                        disabled={saving}
+                    >
+                        {saving ? 'Zapisywanie...' : 'Dodaj samochód'}
+                    </button>
                 </div>
-
-                <div>
-                    <label>Pojemność bagażnika (l):</label>
-                    <input
-                        type="number"
-                        min="0"
-                        value={car.luggageCapacity}
-                        onChange={e => setCar({ ...car, luggageCapacity: Number(e.target.value) })}
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label>Pojemność silnika (cm³):</label>
-                    <input
-                        type="number"
-                        min="0"
-                        value={car.engineCapacity}
-                        onChange={e => setCar({ ...car, engineCapacity: Number(e.target.value) })}
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label>Rodzaj paliwa:</label>
-                    <input
-                        type="number"
-                        min="0"
-                        value={car.fuelType}
-                        onChange={e => setCar({ ...car, fuelType: Number(e.target.value) })}
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label>Data produkcji:</label>
-                    <input
-                        type="date"
-                        value={car.productionDate}
-                        onChange={e => setCar({ ...car, productionDate: e.target.value })}
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label>Średnie spalanie (l/100 km):</label>
-                    <input
-                        type="number"
-                        min="0"
-                        step="0.1"
-                        value={car.averageFuelConsumption}
-                        onChange={e => setCar({ ...car, averageFuelConsumption: Number(e.target.value) })}
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label>Typ nadwozia:</label>
-                    <input
-                        type="number"
-                        min="0"
-                        value={car.bodyType}
-                        onChange={e => setCar({ ...car, bodyType: Number(e.target.value) })}
-                        required
-                    />
-                </div>
-
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Dodawanie...' : 'Dodaj samochód'}
-                </button>
             </form>
         </div>
     );

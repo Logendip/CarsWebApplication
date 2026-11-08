@@ -1,3 +1,12 @@
+# .NET
+.vs/
+bin/
+obj/
+
+# Environment and secrets
+.env
+.env.local
+
 # Logs
 logs
 *.log

@@ -54,7 +54,6 @@ li {
 
 button {
     padding: 9px 16px;
-    margin: 5px;
     border: none;
     border-radius: 5px;
     background-color: #2563eb;
@@ -71,30 +70,115 @@ button:disabled {
     cursor: not-allowed;
 }
 
-input {
-    display: block;
-    width: 100%;
-    max-width: 400px;
-    padding: 9px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
-}
-
-form button {
-    margin-top: 20px;
-}
-
 a {
     color: #2563eb;
 }
 
 a:hover {
     text-decoration: none;
+}
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    background: #111827;
+    border-bottom: 1px solid #263244;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.navbar-content {
+    max-width: 1200px;
+    min-height: 76px;
+    margin: 0 auto;
+    padding: 0 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.navbar-brand:hover {
+    color: #ffffff;
+}
+
+.navbar-logo {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-link {
+    position: relative;
+    padding: 11px 17px;
+    border-radius: 9px;
+
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.navbar-link:hover {
+    background: #263449;
+    color: #ffffff;
+}
+
+.navbar-link.active {
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+@media (max-width: 650px) {
+    .navbar-content {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .navbar-links {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .navbar-link {
+        padding: 9px 12px;
+        font-size: 14px;
+    }
 }

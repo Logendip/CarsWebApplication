@@ -1,0 +1,489 @@
+
+/* Загальний контейнер сторінок */
+
+.page-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 32px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.page-header {
+    margin-bottom: 28px;
+}
+
+.page-header h1 {
+    margin: 0 0 8px;
+    color: #111827;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.page-header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Головна сторінка */
+
+.home-content {
+    max-width: 750px;
+}
+
+.home-content p {
+    color: #4b5563;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.page-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    margin: 0;
+    padding: 0 20px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.page-button:hover {
+    background: #1d4ed8;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.page-button.secondary {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.page-button.secondary:hover {
+    background: #e5e7eb;
+}
+
+/* Список автомобілів */
+
+.cars-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.cars-search {
+    flex: 1;
+    min-width: 220px;
+}
+
+.cars-search input {
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-height: 44px;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #111827;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cars-search input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.favorites-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: #374151;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.favorites-filter input {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: #2563eb;
+    cursor: pointer;
+}
+
+.cars-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.car-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #ffffff;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.car-card:hover {
+    border-color: #bfdbfe;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.car-card h2 {
+    margin: 0;
+    color: #111827;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.car-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin-top: auto;
+}
+
+.car-card-actions a,
+.car-card-actions button:not(.favorite-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    margin: 0;
+    padding: 0 12px;
+    border: none;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+
+.details-button {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.details-button:hover {
+    background: #e5e7eb;
+}
+
+.edit-button {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.edit-button:hover {
+    background: #1d4ed8;
+}
+
+.delete-button {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.delete-button:hover {
+    background: #fee2e2;
+}
+
+/* Сторінка деталей */
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin: 0 0 28px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+    padding: 16px 18px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-item:nth-child(odd) {
+    border-right: 1px solid #e5e7eb;
+}
+
+.detail-item span {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.detail-item strong {
+    color: #111827;
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+
+.details-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.favorite-active {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.favorite-active:hover {
+    background: #dbeafe;
+}
+
+/* Повідомлення */
+
+.page-message {
+    margin: 0;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f9fafb;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.page-error {
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 14px;
+}
+
+/* Сторінка 404 */
+
+.not-found-content {
+    text-align: center;
+    padding: 30px 10px;
+}
+
+.not-found-code {
+    margin: 0;
+    color: #2563eb;
+    font-size: 76px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.not-found-content h1 {
+    margin: 18px 0 10px;
+    color: #111827;
+    font-size: 26px;
+}
+
+.not-found-content p {
+    margin: 0 0 24px;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+/* Адаптивність */
+
+@media (max-width: 700px) {
+    .page-container {
+        margin: 20px 12px;
+        padding: 20px;
+    }
+
+    .cars-list {
+        grid-template-columns: 1fr;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-item:nth-child(odd) {
+        border-right: none;
+    }
+
+    .cars-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .home-actions,
+    .details-actions {
+        flex-direction: column;
+    }
+
+    .home-actions .page-button,
+    .details-actions .page-button {
+        width: 100%;
+    }
+}
+
+/* Модальне вікно підтвердження видалення */
+
+.delete-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
+}
+
+.delete-modal {
+    width: 100%;
+    max-width: 440px;
+    padding: 32px;
+
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+
+    color: #111827;
+    text-align: center;
+}
+
+.delete-modal-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+    background: #fef2f2;
+    color: #dc2626;
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.delete-modal h2 {
+    margin: 0 0 12px;
+    color: #111827;
+    font-size: 21px;
+}
+
+.delete-modal-description {
+    margin: 0 0 24px;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.delete-modal-description strong {
+    color: #111827;
+}
+
+.delete-modal-error {
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 13px;
+    text-align: left;
+}
+
+.delete-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.delete-modal-actions button {
+    min-height: 42px;
+    padding: 0 18px;
+
+    border: none;
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.delete-modal-cancel {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.delete-modal-cancel:hover {
+    background: #e5e7eb;
+}
+
+.delete-modal-confirm {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.delete-modal-confirm:hover {
+    background: #b91c1c;
+}
+
+.delete-modal-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+    .delete-modal {
+        padding: 24px 20px;
+    }
+
+    .delete-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .delete-modal-actions button {
+        width: 100%;
+    }
+}
