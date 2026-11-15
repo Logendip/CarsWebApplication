@@ -5,8 +5,11 @@ import axios from 'axios';
 import type { Car } from '../models/Car';
 import { getCars, deleteCar } from '../services/carService';
 import { useCarUiStore } from '../store/useCarUiStore';
+import { useAuthStore } from '../store/useAuthStore';
 import './Pages.css';
 import FavoriteButton from '../components/FavoriteButton';
+
+const EMPTY_FAVORITES: string[] = [];
 
 export default function CarsPage() {
     const [cars, setCars] = useState<Car[]>([]);
@@ -16,9 +19,18 @@ export default function CarsPage() {
     const [selectedCar, setSelectedCar] = useState<Car | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    const user = useAuthStore(state => state.user);
+    const userId = user?.id;
+    const isAdmin = user?.roles?.includes('Admin') ?? false;
+
     const searchTerm = useCarUiStore(state => state.searchTerm);
     const showFavoritesOnly = useCarUiStore(state => state.showFavoritesOnly);
-    const favoriteCarIds = useCarUiStore(state => state.favoriteCarIds);
+
+    const favoriteCarIds = useCarUiStore(state =>
+        userId
+            ? state.favoriteCarIdsByUser[userId] ?? EMPTY_FAVORITES
+            : EMPTY_FAVORITES
+    );
 
     const setSearchTerm = useCarUiStore(state => state.setSearchTerm);
     const setShowFavoritesOnly = useCarUiStore(
@@ -72,12 +84,14 @@ export default function CarsPage() {
     }, [selectedCar, isDeleting]);
 
     function handleDeleteClick(car: Car) {
+        if (!isAdmin) return;
+
         setDeleteError('');
         setSelectedCar(car);
     }
 
     async function confirmDelete() {
-        if (!selectedCar) return;
+        if (!selectedCar || !userId || !isAdmin) return;
 
         setIsDeleting(true);
         setDeleteError('');
@@ -89,7 +103,7 @@ export default function CarsPage() {
                 currentCars.filter(car => car.id !== selectedCar.id)
             );
 
-            removeFavorite(selectedCar.id);
+            removeFavorite(userId, selectedCar.id);
             setSelectedCar(null);
         } catch (err) {
             setDeleteError(
@@ -176,7 +190,11 @@ export default function CarsPage() {
                             <div className="car-card-actions">
                                 <FavoriteButton
                                     isFavorite={favoriteCarIds.includes(car.id)}
-                                    onClick={() => toggleFavorite(car.id)}
+                                    onClick={() => {
+                                        if (userId) {
+                                            toggleFavorite(userId, car.id);
+                                        }
+                                    }}
                                 />
 
                                 <Link
@@ -193,20 +211,22 @@ export default function CarsPage() {
                                     Edytuj
                                 </Link>
 
-                                <button
-                                    type="button"
-                                    className="delete-button"
-                                    onClick={() => handleDeleteClick(car)}
-                                >
-                                    Usuń
-                                </button>
+                                {isAdmin && (
+                                    <button
+                                        type="button"
+                                        className="delete-button"
+                                        onClick={() => handleDeleteClick(car)}
+                                    >
+                                        Usuń
+                                    </button>
+                                )}
                             </div>
                         </li>
                     ))}
                 </ul>
             )}
 
-            {selectedCar && (
+            {selectedCar && isAdmin && (
                 <div
                     className="delete-modal-overlay"
                     onClick={() => {

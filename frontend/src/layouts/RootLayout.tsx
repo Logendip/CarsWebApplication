@@ -1,10 +1,25 @@
-import { NavLink, Outlet } from 'react-router';
+
+import { NavLink, Outlet, useNavigate } from 'react-router';
 import { useCarUiStore } from '../store/useCarUiStore';
+import { useAuthStore } from '../store/useAuthStore';
 
 export default function RootLayout() {
+    const navigate = useNavigate();
+
     const setShowFavoritesOnly = useCarUiStore(
         state => state.setShowFavoritesOnly
     );
+
+    const user = useAuthStore(state => state.user);
+    const logout = useAuthStore(state => state.logout);
+
+    const handleLogout = () => {
+        logout();
+        setShowFavoritesOnly(false);
+        navigate('/login');
+    };
+
+    const isAdmin = user?.roles?.includes('Admin') ?? false;
 
     return (
         <>
@@ -27,25 +42,76 @@ export default function RootLayout() {
                         </NavLink>
 
                         <NavLink
-                            to="/cars"
-                            end
-                            onClick={() => setShowFavoritesOnly(false)}
+                            to="/about"
                             className={({ isActive }) =>
                                 isActive ? 'navbar-link active' : 'navbar-link'
                             }
                         >
-                            Samochody
+                            O aplikacji
                         </NavLink>
 
-                        <NavLink
-                            to="/cars/new"
-                            end
-                            className={({ isActive }) =>
-                                isActive ? 'navbar-link active' : 'navbar-link'
-                            }
-                        >
-                            Dodaj samochód
-                        </NavLink>
+                        {user && (
+                            <>
+                                <NavLink
+                                    to="/cars"
+                                    end
+                                    onClick={() => setShowFavoritesOnly(false)}
+                                    className={({ isActive }) =>
+                                        isActive ? 'navbar-link active' : 'navbar-link'
+                                    }
+                                >
+                                    Samochody
+                                </NavLink>
+
+                                <NavLink
+                                    to="/cars/new"
+                                    className={({ isActive }) =>
+                                        isActive ? 'navbar-link active' : 'navbar-link'
+                                    }
+                                >
+                                    Dodaj samochód
+                                </NavLink>
+                            </>
+                        )}
+                    </nav>
+
+                    <nav className="navbar-links">
+                        {user ? (
+                            <>
+                                <span className="navbar-link">
+                                    {user.userName}
+                                    {isAdmin && ' (Admin)'}
+                                </span>
+
+                                <button
+                                    type="button"
+                                    className="navbar-link"
+                                    onClick={handleLogout}
+                                >
+                                    Wyloguj się
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <NavLink
+                                    to="/login"
+                                    className={({ isActive }) =>
+                                        isActive ? 'navbar-link active' : 'navbar-link'
+                                    }
+                                >
+                                    Logowanie
+                                </NavLink>
+
+                                <NavLink
+                                    to="/register"
+                                    className={({ isActive }) =>
+                                        isActive ? 'navbar-link active' : 'navbar-link'
+                                    }
+                                >
+                                    Rejestracja
+                                </NavLink>
+                            </>
+                        )}
                     </nav>
                 </div>
             </header>

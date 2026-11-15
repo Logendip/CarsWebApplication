@@ -5,8 +5,11 @@ import axios from 'axios';
 import type { Car } from '../models/Car';
 import { getCarById } from '../services/carService';
 import { useCarUiStore } from '../store/useCarUiStore';
+import { useAuthStore } from '../store/useAuthStore';
 import './Pages.css';
 import FavoriteButton from '../components/FavoriteButton';
+
+const EMPTY_FAVORITES: string[] = [];
 
 const fuelTypes = [
     'Benzyna',
@@ -31,8 +34,13 @@ export default function CarDetailsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    const favoriteCarIds = useCarUiStore(
-        state => state.favoriteCarIds
+    const user = useAuthStore(state => state.user);
+    const userId = user?.id;
+
+    const favoriteCarIds = useCarUiStore(state =>
+        userId
+            ? state.favoriteCarIdsByUser[userId] ?? EMPTY_FAVORITES
+            : EMPTY_FAVORITES
     );
 
     const toggleFavorite = useCarUiStore(
@@ -179,8 +187,13 @@ export default function CarDetailsPage() {
             <div className="details-actions">
                 <FavoriteButton
                     isFavorite={isFavorite}
-                    onClick={() => toggleFavorite(car.id)}
+                    onClick={() => {
+                        if (userId) {
+                            toggleFavorite(userId, car.id);
+                        }
+                    }}
                 />
+
                 <Link
                     to={`/cars/${car.id}/edit`}
                     className="page-button"

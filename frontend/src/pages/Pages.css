@@ -1,5 +1,7 @@
 
-/* Загальний контейнер сторінок */
+/* ========================================
+   ЗАГАЛЬНІ СТИЛІ СТОРІНОК
+======================================== */
 
 .page-container {
     max-width: 1100px;
@@ -29,7 +31,9 @@
     line-height: 1.6;
 }
 
-/* Головна сторінка */
+/* ========================================
+   ГОЛОВНА СТОРІНКА
+======================================== */
 
 .home-content {
     max-width: 750px;
@@ -81,7 +85,9 @@
     background: #e5e7eb;
 }
 
-/* Список автомобілів */
+/* ========================================
+   СПИСОК АВТОМОБІЛІВ
+======================================== */
 
 .cars-toolbar {
     display: flex;
@@ -192,7 +198,6 @@
     transition: background 0.2s;
 }
 
-
 .details-button {
     background: #f3f4f6;
     color: #374151;
@@ -220,7 +225,9 @@
     background: #fee2e2;
 }
 
-/* Сторінка деталей */
+/* ========================================
+   СТОРІНКА ДЕТАЛЕЙ
+======================================== */
 
 .details-grid {
     display: grid;
@@ -273,7 +280,9 @@
     background: #dbeafe;
 }
 
-/* Повідомлення */
+/* ========================================
+   ПОВІДОМЛЕННЯ
+======================================== */
 
 .page-message {
     margin: 0;
@@ -295,7 +304,9 @@
     font-size: 14px;
 }
 
-/* Сторінка 404 */
+/* ========================================
+   СТОРІНКА 404
+======================================== */
 
 .not-found-content {
     text-align: center;
@@ -322,53 +333,17 @@
     font-size: 15px;
 }
 
-/* Адаптивність */
-
-@media (max-width: 700px) {
-    .page-container {
-        margin: 20px 12px;
-        padding: 20px;
-    }
-
-    .cars-list {
-        grid-template-columns: 1fr;
-    }
-
-    .details-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .detail-item:nth-child(odd) {
-        border-right: none;
-    }
-
-    .cars-toolbar {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .home-actions,
-    .details-actions {
-        flex-direction: column;
-    }
-
-    .home-actions .page-button,
-    .details-actions .page-button {
-        width: 100%;
-    }
-}
-
-/* Модальне вікно підтвердження видалення */
+/* ========================================
+   МОДАЛЬНЕ ВІКНО ВИДАЛЕННЯ
+======================================== */
 
 .delete-modal-overlay {
     position: fixed;
     inset: 0;
     z-index: 99999;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     padding: 20px;
     background: rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(5px);
@@ -378,11 +353,9 @@
     width: 100%;
     max-width: 440px;
     padding: 32px;
-
     border-radius: 18px;
     background: #ffffff;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-
     color: #111827;
     text-align: center;
 }
@@ -391,15 +364,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 52px;
     height: 52px;
     margin: 0 auto 20px;
-
     border-radius: 50%;
     background: #fef2f2;
     color: #dc2626;
-
     font-size: 28px;
     font-weight: 700;
 }
@@ -441,10 +411,8 @@
 .delete-modal-actions button {
     min-height: 42px;
     padding: 0 18px;
-
     border: none;
     border-radius: 8px;
-
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -474,6 +442,260 @@
     cursor: not-allowed;
 }
 
+/* ========================================
+   СТОРІНКИ АВТОРИЗАЦІЇ
+======================================== */
+
+.auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 90px);
+    padding: 50px 20px;
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 35%),
+        #f3f6fb;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 42px 40px;
+    background: #ffffff;
+    border: 1px solid #e5eaf2;
+    border-radius: 18px;
+    box-shadow:
+        0 15px 45px rgba(15, 23, 42, 0.08),
+        0 3px 10px rgba(15, 23, 42, 0.03);
+    animation: authFadeIn 0.4s ease;
+}
+
+.auth-card h1 {
+    margin: 0 0 10px;
+    color: #172554;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.7px;
+    text-align: center;
+}
+
+.auth-card > p {
+    margin: 0 0 32px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* Форма */
+
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth-card .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.auth-card .form-group label {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.auth-card .form-group input {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    min-height: 48px;
+    margin: 0;
+    padding: 0 15px;
+    border: 1px solid #dbe3ef;
+    border-radius: 9px;
+    background: #f8fafc;
+    color: #0f172a;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.auth-card .form-group input::placeholder {
+    color: #94a3b8;
+}
+
+.auth-card .form-group input:hover {
+    border-color: #94a3b8;
+}
+
+.auth-card .form-group input:focus {
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+}
+
+/* Кнопка відправлення */
+
+.auth-card .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 49px;
+    margin-top: 5px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 9px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-card .btn-primary:hover {
+    background: #1d4ed8;
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.22);
+    transform: translateY(-1px);
+}
+
+.auth-card .btn-primary:active {
+    transform: translateY(0);
+}
+
+.auth-card .btn-primary:disabled {
+    background: #93b4f5;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Посилання */
+
+.auth-links {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+    margin-top: 27px;
+    padding-top: 23px;
+    border-top: 1px solid #edf0f5;
+    text-align: center;
+}
+
+.auth-links p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.auth-links a {
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.auth-links a:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+/* Повідомлення про помилки та успіх */
+
+.auth-card .error-message,
+.auth-card .success-message {
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.auth-card .error-message {
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.auth-card .success-message {
+    border: 1px solid #bbf7d0;
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+/* Анімація */
+
+@keyframes authFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   АДАПТИВНІСТЬ
+======================================== */
+
+@media (max-width: 700px) {
+    .page-container {
+        margin: 20px 12px;
+        padding: 20px;
+    }
+
+    .cars-list {
+        grid-template-columns: 1fr;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-item:nth-child(odd) {
+        border-right: none;
+    }
+
+    .cars-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .home-actions,
+    .details-actions {
+        flex-direction: column;
+    }
+
+    .home-actions .page-button,
+    .details-actions .page-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .auth-container {
+        min-height: calc(100vh - 70px);
+        padding: 30px 15px;
+    }
+
+    .auth-card {
+        padding: 32px 24px;
+        border-radius: 14px;
+    }
+
+    .auth-card h1 {
+        font-size: 26px;
+    }
+}
+
 @media (max-width: 480px) {
     .delete-modal {
         padding: 24px 20px;
@@ -485,5 +707,11 @@
 
     .delete-modal-actions button {
         width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+    .auth-card {
+        padding: 28px 18px;
     }
 }
